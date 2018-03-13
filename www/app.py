@@ -120,7 +120,8 @@ def init_jinja2(app, **kw):
     if filters is not None:
         for name, f in filters.items():
             env.filters[name] = f
-    app['__templiting__'] = env
+    #app['__templiting__'] = env
+    app['__templating__'] = env
 
 
 
