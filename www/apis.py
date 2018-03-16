@@ -49,7 +49,7 @@ class Page(object):
         '''
         Init Pagination.
         :param item_count: max number of items
-        :param page_index: current page index
+        :param page_index:  page index value when init
         :param page_size:
 
         >>> p1 = Page(100,1)
