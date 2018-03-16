@@ -141,8 +141,8 @@ class ModelMetaClass(type):
         # 构造默认的SELECT, INSERT, UPDATE和DELETE语句:
         attrs['__select__'] = 'select `%s`, %s from `%s`' % (primaryKey, ','.join(escaped_fields), tableName)
         attrs['__insert__'] = "insert into `%s` (%s, `%s`) values (%s)" % (tableName, ','.join(escaped_fields), primaryKey, create_args_string(len(escaped_fields) + 1))
-        attrs['__update__'] = "update '%s', set %s where '%s' = ?" % (tableName, ','.join(map(lambda f: "'%s'=?" % (mappings.get(f).name or f), fields)),primaryKey )
-        attrs['__delete__'] = "delete from '%s' where '%s'=?" % (tableName,primaryKey)
+        attrs['__update__'] = "update `%s`, set %s where `%s` = ?" % (tableName, ','.join(map(lambda f: "'%s'=?" % (mappings.get(f).name or f), fields)),primaryKey )
+        attrs['__delete__'] = "delete from `%s` where `%s`=?" % (tableName,primaryKey)
         return type.__new__(cls,name , bases, attrs)
 
 
@@ -193,7 +193,7 @@ class Model(dict, metaclass=ModelMetaClass):
             if isinstance(limit, int):
                 sql.append('?')
                 args.append(limit)
-            elif isinstance(limit. tuple) and len(limit) == 2:
+            elif isinstance(limit, tuple) and len(limit) == 2:
                 sql.append('?, ?')
                 args.extend(limit)
             else:
@@ -205,7 +205,11 @@ class Model(dict, metaclass=ModelMetaClass):
     @asyncio.coroutine
     def findNumber(cls, selectField, where=None, args=None):
         ' find number by select and where.'
-        sql = ["select %s _num_ from '%s'" % (selectField , cls.__table__)]
+        '''
+        sql exeute: SELECT count(id) _num_ FROM awesome.users;'
+        sql return: rs = [{'_num_':2}]
+        '''
+        sql = ["select %s _num_ from `%s`" % (selectField , cls.__table__)]
         if where:
             sql.append('where')
             sql.append(where)
@@ -214,12 +218,11 @@ class Model(dict, metaclass=ModelMetaClass):
             return None
         return rs[0]['_num_']
 
-
     @classmethod
     @asyncio.coroutine
     def find(cls,pk):
         'find object by primary key.'
-        rs = yield from select("%s where '%s'=?" % (cls.__select__, cls.__primary_key__), [pk], 1)
+        rs = yield from select('%s where `%s`=?' % (cls.__select__, cls.__primary_key__), [pk], 1)
         if len(rs) == 0:
             return None
         return cls(**rs[0])

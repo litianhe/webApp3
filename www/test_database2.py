@@ -26,7 +26,7 @@ def testdb(loop):
     #u = User(email='test2@test.com', passwd='password', admin=True, name='testname2', image='blank', id='testid2',created_at='1.0')
 
     "create a user with fixed auto-generated <id> and <created_at>"
-    u = User(email='test2@test.com', passwd='password', admin=True, name='testname2', image='blank',id=None,created_at=None) #
+    u = User(email='test3@test.com', passwd='password', admin=True, name='testname3', image='blank',id=None,created_at=None) #
     print('Save the new user into database...')
     r = yield from u.save()
     print('r : %s' % r)
