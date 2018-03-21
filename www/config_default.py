@@ -20,6 +20,6 @@ configs = {
     },
 
     'session':{
-        'secret': 'AwEsOmE'
+        'secret': 'ThisIsSessionSecretKey'
     }
 }

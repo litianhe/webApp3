@@ -3,43 +3,6 @@
 
 __author__ = 'Tianhe'
 
-'''
-API error definition
-'''
-
-class APIError(Exception):
-    '''
-    the base APIError which contains error(required), data(optional) and message(optional)
-    :param Exception:
-    :return:
-    '''
-    def __init__(self, error, data='' , message=''):
-        super(APIError,self).__init__(message)
-        self.error = error
-        self.data = data
-        self.message = message
-
-class APIValueError(APIError):
-    '''
-    indicate the input value has error or invalid. The data specifies the error filed of input form
-    '''
-    def __init__(self, field, message=''):
-        super(APIValueError,self).__init__('value: invalid', field, message)
-
-class APIResourceNotFoundError(APIError):
-    '''
-    indicate the resource was not found. The data specifies the resource name
-    '''
-    def __init__(self, field, message=''):
-        super(APIError,self).__init__('value: not found', field, message)
-
-class APIPermissionError(APIError):
-    '''
-    indicate the api has no permission
-    '''
-    def __init__(self, message=''):
-        super(APIPermissionError,self).__init__('permission: forbidden', 'permission', message)
-
 class Page(object):
     '''
     Page object for display pages.
@@ -91,4 +54,41 @@ class Page(object):
     def __str__(self):
         return 'item_count: %s, page_count: %s, page_index: %s, page_size: %s, offset: %s, limit=%s' % (self.item_count,self.page_count,self.page_index,self.page_size,self.offset,self.limit)
 
-    __repr__ = __str__
+    #__repr__ = __str__
+
+'''
+API error definition
+'''
+
+class APIError(Exception):
+    '''
+    the base APIError which contains error(required), data(optional) and message(optional)
+    :param Exception:
+    :return:
+    '''
+    def __init__(self, error, data='' , message=''):
+        super(APIError,self).__init__(message)
+        self.error = error
+        self.data = data
+        self.message = message
+
+class APIValueError(APIError):
+    '''
+    indicate the input value has error or invalid. The data specifies the error filed of input form
+    '''
+    def __init__(self, field, message=''):
+        super(APIValueError,self).__init__('value: invalid', field, message)
+
+class APIResourceNotFoundError(APIError):
+    '''
+    indicate the resource was not found. The data specifies the resource name
+    '''
+    def __init__(self, field, message=''):
+        super(APIError,self).__init__('value: not found', field, message)
+
+class APIPermissionError(APIError):
+    '''
+    indicate the api has no permission
+    '''
+    def __init__(self, message=''):
+        super(APIPermissionError,self).__init__('permission: forbidden', 'permission', message)

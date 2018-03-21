@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    {% block meta %}<!--block meta--> {% endblock %}
-    <title>{% block title %} ? {% endblock %} webApp3</title>
+    <meta charset="utf-8" />
+    {% block meta %}<!-- block meta  -->{% endblock %}
+    <title>{% block title %} ? {% endblock %} - Awesome Python Webapp</title>
     <link rel="stylesheet" href="/static/css/uikit.min.css">
-    <link rel="stylesheet" href="/static/css/uikit-rtl.min.css">
+    <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
+    <link rel="stylesheet" href="/static/css/awesome.css" />
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/sha1.min.js"></script>
+    <script src="/static/js/sticky.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/awesome.js"></script>
     <script src="/static/js/uikit.min.js"></script>
-    <script src="/static/js/uikit-icons.min.js"></script>
-    {% block beforehead %}<!-- before head -->{% endblock %}
+    {% block beforehead %}<!-- before head  -->{% endblock %}
 </head>
 <body>
     <nav class="uk-navbar uk-navbar-attached uk-margin-bottom">
@@ -40,7 +45,7 @@
     </nav>
 
     <div class="uk-container uk-container-center">
-        <div class="uk-gird">
+        <div class="uk-grid">
             <!-- content -->
             {% block content %}
             ...

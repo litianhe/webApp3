@@ -155,7 +155,9 @@ class Model(dict, metaclass=ModelMetaClass):
         try:
             return self[key]
         except KeyError:
-            raise AttributeError(r"'Model' object has no attribute '%s'"  % key)
+            if key in self.__mapping__:
+                return None
+            raise AttributeError('Model object has no attribute: %s' % key)
 
     def __setattr__(self, key, value):
         self[key] = value
@@ -229,7 +231,6 @@ class Model(dict, metaclass=ModelMetaClass):
 
     @asyncio.coroutine
     def save(self):
-        print('save...')
         args = list(map(self.getValueOrDefault, self.__fields__))
         args.append(self.getValueOrDefault(self.__primary_key__))
         print('execute %s , %s' % (self.__insert__, args))
