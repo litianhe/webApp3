@@ -4,7 +4,7 @@
 __author__ = 'Tianhe'
 
 '''
-asyni web appliation
+async web application
 '''
 
 import logging; logging.basicConfig(level=logging.INFO)
@@ -41,6 +41,30 @@ loop.run_until_complete(init(loop))
 loop.run_forever()
 '''
 
+from www.handlers import COOKIE_NAME
+
+def init_jinja2(app, **kw):
+    logging.info('init jinja2...')
+    options = dict(
+        autoescape = kw.get('autoescape', True),
+        block_start_string = kw.get('block_start_string', '{%') ,
+        block_end_string = kw.get('block_end_string', '%}'),
+        variable_start_string = kw.get('variable_start_string', '{{'),
+        variable_end_string = kw.get('variable_end_string', '}}'),
+        auto_reload = kw.get('auto_reload', True)
+    )
+    path = kw.get('path', None)
+    if path is None:
+        path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'templates')
+    logging.info('set jinja2 template path to: %s' % path)
+    env = Environment(loader=FileSystemLoader(path), **options)
+    filters = kw.get('filters', None)
+    if filters is not None:
+        for name, f in filters.items():
+            env.filters[name] = f
+    #app['__templiting__'] = env
+    app['__templating__'] = env
+
 @asyncio.coroutine
 def logger_factory(app, handler):
     @asyncio.coroutine
@@ -53,10 +77,11 @@ def logger_factory(app, handler):
 def auth_factory(app,handler):
     # app = web.application
     # handler = RequestHandler
+    @asyncio.coroutine
     def auth(request):
         logging.info('check user: %s %s' % (request.method, request.path))
         request.__user__ = None
-        from www.handlers import COOKIE_NAME
+        
         cookie_str = request.cookies.get(COOKIE_NAME)
         if cookie_str:
             user = yield from cookie2user(cookie_str)
@@ -71,6 +96,7 @@ def auth_factory(app,handler):
 def response_factory(app, handler):
     @asyncio.coroutine
     def response(request):
+        logging.info('Response handler...')
         r = yield from handler(request)
         if isinstance(r,web.StreamResponse):
             return r
@@ -118,28 +144,6 @@ def datetime_filter(t):
     else:
         dt = datetime.fromtimestamp(t)
         return u'%s year %s month %s day' % (dt.year, dt.month, dt.day)
-
-def init_jinja2(app, **kw):
-    logging.info('init jinja2...')
-    options = dict(
-        autoescape = kw.get('autoescape', True),
-        block_start_string = kw.get('block_start_string', '{%') ,
-        block_end_string = kw.get('block_end_string', '%}'),
-        variable_start_string = kw.get('variable_start_string', '{{'),
-        variable_end_string = kw.get('variable_end_string', '}}'),
-        auto_reload = kw.get('auto_reload', True)
-    )
-    path = kw.get('path', None)
-    if path is None:
-        path = os.path.join( os.path.dirname(os.path.abspath(__file__)), 'templates')
-    logging.info('set jinja2 template path to: %s' % path)
-    env = Environment(loader=FileSystemLoader(path), **options)
-    filters = kw.get('filters', None)
-    if filters is not None:
-        for name, f in filters.items():
-            env.filters[name] = f
-    #app['__templiting__'] = env
-    app['__templating__'] = env
 
 
 
