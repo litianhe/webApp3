@@ -263,6 +263,13 @@ def api_get_users(page='1'):
         u.passwd = u.passwd + '**'
     return dict(page=p, users=users)
 
+@get('/user/{id}')
+def get_user(id):
+    user = yield from User.find(id)
+    if user is None:
+        return "user is not exist."
+    #return dict(user=user)
+    return user
 
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
@@ -298,7 +305,7 @@ def api_get_blogs(*, page='1'):
     p = Page(num, page_index)
     if num==0:
         return dict(page=p, blogs=())
-    blogs = yield from Blog.findAll(orderBy='create_at desc', limit=(p.offset,p.limit))
+    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(p.offset,p.limit))
     return dict(page=p, blogs=blogs)
 
 @get('/api/blogs/{id}')
