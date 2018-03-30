@@ -88,8 +88,9 @@ def cookie2user(cookie_str):
     user.passwd = user.passwd + "*cookie"
     return user
 
+#mainpage
 @get('/')
-def index(*, page='1'):
+def index(request, *, page='1'):
     page_index = get_page_index(page)
     num = yield from Blog.findNumber('count(id)')
     page = Page(num)
@@ -171,7 +172,7 @@ def signout(request):
 
 @get('/manage/')
 def manage():
-    return 'redirect: /manage/comments'
+    return 'redirect: /manage/blogs'
 
 @get('/manage/comments')
 def manage_comments(request,*, page='1'):
