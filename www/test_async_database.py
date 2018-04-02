@@ -9,8 +9,8 @@ async def test_example(loop):
                                   db='awesome',loop=loop)
 
     async with conn.cursor() as cur:
-        await cur.execute("SELECT * FROM blogs")
-        print(cur.description)
+        await cur.execute("SELECT `name`,id FROM users")
+        #print(cur.description)
         r = await cur.fetchall()
         print(r)
     conn.close()
