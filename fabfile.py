@@ -31,4 +31,23 @@ def build():
         local(' '.join(cmd))
 
 
+_REMOTE_TMP_TAR = '/tmp/%s' % _TAR_FILE
+_REMOTE_BASE_DIR = '/srv/awesome'
 
+def deploy():
+    newdir = 'www-%s' % datetime.now().strftime('%y-%m-%d_%H.%M.%S')
+    # del existing tar file
+    run('rm -f %s' % _REMOTE_TMP_TAR)
+    # upload latest tar file
+    put('dist/%s' % _TAR_FILE , _REMOTE_TMP_TAR )
+    # create new folder
+    with cd(_REMOTE_BASE_DIR):
+        sudo('rm -f www')
+        sudo('ln -s %s www' % newdir)
+        sudo('chown www-data:www-data www')
+        sudo('chown -R www-data:www-data %s', newdir)
+    # reboot python service and niginx service
+    with settings(warn_only=True):
+        sudo('supervisorctl stop awesome')
+        sudo('supervisorctl start awesome')
+        sudo('/etc/init.d/nginx reload')
