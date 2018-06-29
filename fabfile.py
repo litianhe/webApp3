@@ -43,10 +43,14 @@ def deploy():
     put('dist/%s' % _TAR_FILE , _REMOTE_TMP_TAR )
     # create new folder
     with cd(_REMOTE_BASE_DIR):
+        sudo('mkdir %s' % newdir)
+    with cd('%s/%s' % (_REMOTE_BASE_DIR, newdir)):
+        sudo('tar -xzvf %s' % _REMOTE_TMP_TAR)
+    with cd(_REMOTE_BASE_DIR):
         sudo('rm -f www')
         sudo('ln -s %s www' % newdir)
         sudo('chown www-data:www-data www')
-        sudo('chown -R www-data:www-data %s', newdir)
+        sudo('chown -R www-data:www-data %s' % newdir)
     # reboot python service and niginx service
     with settings(warn_only=True):
         sudo('supervisorctl stop awesome')
