@@ -49,8 +49,8 @@ def deploy():
     with cd(_REMOTE_BASE_DIR):
         sudo('rm -f www')
         sudo('ln -s %s www' % newdir)
-        sudo('chown www-data:www-data www')
-        sudo('chown -R www-data:www-data %s' % newdir)
+        sudo('chown ubuntu:ubuntu www')
+        sudo('chown -R ubuntu:ubuntu %s' % newdir)
     # reboot python service and niginx service
     with settings(warn_only=True):
         sudo('supervisorctl stop awesome')
