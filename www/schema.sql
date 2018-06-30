@@ -14,6 +14,11 @@ create database awesome;
 
 use awesome;
 
+/*
+give access right to mysql user (username: www-data, password:www-data)
+no need to create www-data account.
+how to check it from ubuntu: $mysql -u www-data -p
+*/
 grant select, insert, update, delete on awesome.* to 'www-data'@'localhost' identified by 'www-data';
 
 create table users (
