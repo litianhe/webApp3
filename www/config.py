@@ -5,7 +5,7 @@ __author__ = 'Tianhe'
 
 'webApp3 configration'
 
-import www.config_default as configDefault
+import config_default
 
 
 def merge(defaults, override):
@@ -32,10 +32,10 @@ def merge(defaults, override):
     return r
 '''
 
-configs = configDefault.configs
+configs = config_default.configs
 
 try:
-    import www.config_override as config_override
+    import config_override
     configs = merge(configs, config_override.configs)
     print('config %s' % configs)
     print('config override %s' % config_override.configs)

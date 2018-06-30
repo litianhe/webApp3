@@ -9,15 +9,19 @@ async web application
 
 import logging; logging.basicConfig(level=logging.INFO)
 
-import asyncio,os,json,time
+import asyncio, os, json, time
 from datetime import datetime
 
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 
-from www.coroweb import add_static, add_routes
-from www import orm
-from www.handlers import cookie2user
+from config import configs
+
+import orm
+from coroweb import add_routes, add_static
+
+from handlers import cookie2user, COOKIE_NAME
+
 
 '''
 def index(request):
@@ -41,7 +45,6 @@ loop.run_until_complete(init(loop))
 loop.run_forever()
 '''
 
-from www.handlers import COOKIE_NAME
 
 def init_jinja2(app, **kw):
     logging.info('init jinja2...')
@@ -150,7 +153,7 @@ def datetime_filter(t):
 
 @asyncio.coroutine
 def init(loop):
-    yield from orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='www-data', password='www-data', db='awesome')
+    yield from orm.create_pool(loop=loop, **configs.db)
     app = web.Application(loop=loop, middlewares=[
         logger_factory, auth_factory, response_factory
     ])

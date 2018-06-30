@@ -10,6 +10,8 @@ __author__ = 'Tianhe'
 configs = {
     'debug': False,
     'db':{
-        'host': '127.0.0.2'
+        'host': '127.0.0.1',
+        'user': 'root',
+        'password':'PASSW0RD',		
     }
 }

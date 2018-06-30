@@ -5,15 +5,15 @@ __author__ = 'Tianhe'
 
 'web url handlers'
 
-from www.coroweb import get,post
-from www.models import User,Blog,Comment
-from www.apis import *
+from coroweb import get,post
+from models import User,Blog,Comment
+from apis import *
 import time
 import re
 import hashlib
 from aiohttp import web
 import json
-from www.config import configs
+from config import configs
 import logging
 import markdown2
 import asyncio
