@@ -25,6 +25,8 @@ def build():
     includes = ['static', 'templates', 'favicon.ico', '*.py']
     excludes = ['test', '.*', '*.pyc', '*.pyo']
     local('rm -f dist/%s' % _TAR_FILE)
+    local('git clean -fd')
+    local('git pull')
     with lcd(os.path.join(os.path.abspath('.'),'www')):
         cmd = ['tar', '--dereference', '-czvf', '../dist/%s' % _TAR_FILE]
         cmd.extend(['--exclude=\'%s\'' % ex for ex in excludes])
