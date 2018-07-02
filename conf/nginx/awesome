@@ -6,6 +6,7 @@ server {
     error_log  /srv/awesome/log/error_log;
 
     #
+    server_name 10.240.219.22
 
     #
     location /favicon.ico {
